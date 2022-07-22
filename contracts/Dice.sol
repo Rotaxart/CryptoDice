@@ -1,7 +1,10 @@
-pragma solidity ^0.8.0;
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.4;
 
-contract Dice{
-    address payable public owner;
+import "./DiceToken.sol";
+
+contract Dice is DiceCoin{
+    address payable public contractOwner;
     uint public cryptoSalt; 
     enum result {
         OK, 
@@ -23,7 +26,7 @@ contract Dice{
     mapping (address => Player) public players;
     
     constructor(){
-        owner = payable(msg.sender);
+        contractOwner = payable(msg.sender);
         cryptoSalt = 0xAAAA; // Default salt
     }
 
