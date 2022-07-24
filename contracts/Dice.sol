@@ -56,7 +56,7 @@ contract Dice is DiceCoin{
                 players[msg.sender].results[players[msg.sender].results.length - 1]) ;
     }
 
-    function playDice(direction _direction) public payable {
+    function playDice(direction _direction, uint _amount) public payable {
         require(_direction == direction.UP || 
                 _direction == direction.DOWN || 
                 _direction == direction.ZERO, 'Wrong value');
@@ -64,7 +64,8 @@ contract Dice is DiceCoin{
         uint8 randomNumber = uint8(getRandomNumber() % 101);
         players[msg.sender].rolls.push(randomNumber);
         players[msg.sender].directions.push(_direction);
-
+        
+        cryptoSalt++;
          emit playLog(players[msg.sender].playerAddress, 
                       randomNumber, 
                       _direction, 
@@ -73,24 +74,33 @@ contract Dice is DiceCoin{
 
         if(_direction == direction.UP){
             if(randomNumber > 50){
-                players[msg.sender].playerAddress.transfer(msg.value * 2);
+            //    players[msg.sender].playerAddress.transfer(msg.value * 2);
+                _approve(contractOwner, msg.sender, _amount);
+                transferFrom(contractOwner, msg.sender, _amount);
                 players[msg.sender].results.push(result.WIN);
             }else{               
                 players[msg.sender].results.push(result.LOSE);
+                transfer(contractOwner, _amount);
             }
         }else if(_direction == direction.DOWN){
             if(randomNumber < 49){
-                players[msg.sender].playerAddress.transfer(msg.value * 2);
+            //    players[msg.sender].playerAddress.transfer(msg.value * 2);
+                _approve(contractOwner, msg.sender, _amount);
+                transferFrom(contractOwner, msg.sender, _amount);
                 players[msg.sender].results.push(result.WIN);
             }else{
                 players[msg.sender].results.push(result.LOSE);
+                transfer(contractOwner, _amount);
             }
         }else if(_direction == direction.ZERO){
             if(randomNumber == 49 || randomNumber == 50 ){
-                players[msg.sender].playerAddress.transfer(msg.value * 10);
+             //   players[msg.sender].playerAddress.transfer(msg.value * 10);
+                _approve(contractOwner, msg.sender, _amount * 10);
+                transferFrom(contractOwner, msg.sender, _amount * 10);
                 players[msg.sender].results.push(result.WIN);
             }else{
                 players[msg.sender].results.push(result.LOSE);
+                transfer(contractOwner, _amount);
             }
         }
     }
