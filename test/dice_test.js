@@ -13,7 +13,7 @@ contract('Dice', accounts => {
         let instance = await Dice.deployed();
         //let log = await instance.getPlayerInfo();
         let init = await instance.initialisation();
-        let play = await instance.playDice(0);
+        let play = await instance.playDice(0, 1);
         let log1 = await instance.getPlayerInfo();
         
         console.log(`random number: ${log1[1]}`);
@@ -31,68 +31,69 @@ contract('Dice', accounts => {
     it('Result is correctly', async () => {
         let instance = await Dice.deployed();
         let init = await instance.initialisation();
-        let play = await instance.playDice(0);
+        let transfer = await instance.transfer(accounts[1], 10000);
+        let play = await instance.playDice(0, 1, {from: accounts[1], gas: 5000000});
 
-        let log1 = await instance.getPlayerInfo();
+        let log1 = await instance.getPlayerInfo({from: accounts[1]});
         //log1 = await instance.getPlayerInfo();
         for(let i=0; i<1; ){
             if(log1[1] > 50){
                 i++;
             }
             else {
-                  play = await instance.playDice(0);
-                  log1 = await instance.getPlayerInfo();
+                  play = await instance.playDice(0, 1, {from: accounts[1], gas: 5000000});
+                  log1 = await instance.getPlayerInfo({from: accounts[1]});
             }
         }
         
-        log1= await instance.getPlayerInfo();;       
+        log1= await instance.getPlayerInfo({from: accounts[1]});;       
         console.log(`random number: ${log1[1]}; direction: ${log1[2]}; result: ${log1[3]}; Win`);
         assert.equal(log1[3], 2);
-        play = await instance.playDice(0);
-        log1 = await instance.getPlayerInfo();
+        play = await instance.playDice(0, 1, {from: accounts[1], gas: 5000000});
+        log1 = await instance.getPlayerInfo({from: accounts[1]});
         for(let i=0; i<1; ){
             if(log1[1] <= 50){
                 i++;
             }
             else {
-                  play = await instance.playDice(0);
-                  log1 = await instance.getPlayerInfo();
+                  play = await instance.playDice(0, 1, {from: accounts[1], gas: 5000000});
+                  log1 = await instance.getPlayerInfo({from: accounts[1]});
             }
         }
         
-        log1= await instance.getPlayerInfo();;       
+        log1= await instance.getPlayerInfo({from: accounts[1]});;       
         console.log(`random number: ${log1[1]}; direction: ${log1[2]}; result: ${log1[3]}; Lose`);
         assert.equal(log1[3], 3);
         
-        play = await instance.playDice(1);  
-        log1 = await instance.getPlayerInfo();
+        play = await instance.playDice(1, 1, {from: accounts[1], gas: 5000000});  
+        log1 = await instance.getPlayerInfo({from: accounts[1]});
         for(let i=0; i<1; ){
             if(log1[1] < 49){
                 i++;
             }
             else {
-                  play = await instance.playDice(1);
-                  log1 = await instance.getPlayerInfo();
+                  play = await instance.playDice(1, 1, {from: accounts[1], gas: 5000000});
+                  log1 = await instance.getPlayerInfo({from: accounts[1]});
             }
         }
         
-        log1= await instance.getPlayerInfo();;       
+        log1= await instance.getPlayerInfo({from: accounts[1]});;       
         console.log(`random number: ${log1[1]}; direction: ${log1[2]}; result: ${log1[3]}: Win`);
         assert.equal(log1[3], 2);
         
-        play = await instance.playDice(1);
-        log1 = await instance.getPlayerInfo();
+        play = await instance.playDice(1, 1, {from: accounts[1], gas: 5000000});
+        log1 = await instance.getPlayerInfo({from: accounts[1]});
         for(let i=0; i<1; ){
             if(log1[1] >= 49){
                 i++;
             }
             else {
-                  play = await instance.playDice(1);
-                  log1 = await instance.getPlayerInfo();
+                  play = await instance.playDice(1, 1, {from: accounts[1], gas: 5000000});
+                  log1 = await instance.getPlayerInfo({from: accounts[1]});
             }
         }
         
-        log1= await instance.getPlayerInfo();;       
+        log1= await instance.getPlayerInfo({from: accounts[1]});;       
         console.log(`random number: ${log1[1]}; direction: ${log1[2]}; result: ${log1[3]}: Lose`);
         assert.equal(log1[3], 3);
 /*
@@ -112,19 +113,19 @@ contract('Dice', accounts => {
         console.log(`random number: ${log1[1]}; direction: ${log1[2]}; result: ${log1[3]}: Win`);
         assert.equal(log1[3], 2);
 */        
-        play = await instance.playDice(2);
-        log1 = await instance.getPlayerInfo();
+        play = await instance.playDice(2, 1, {from: accounts[1], gas: 5000000});
+        log1 = await instance.getPlayerInfo({from: accounts[1]});
         for(let i=0; i<1; ){
             if(log1[1] != 49 || log1[1] != 50){
                 i++;
             }
             else {
-                  play = await instance.playDice(1);
-                  log1 = await instance.getPlayerInfo();
+                  play = await instance.playDice(1, 1, {from: accounts[1], gas: 5000000});
+                  log1 = await instance.getPlayerInfo({from: accounts[1]});
             }
         }
         
-        log1= await instance.getPlayerInfo();;       
+        log1= await instance.getPlayerInfo({from: accounts[1]});;       
         console.log(`random number: ${log1[1]}; direction: ${log1[2]}; result: ${log1[3]}: Lose`);
         assert.equal(log1[3], 3);
     })   
