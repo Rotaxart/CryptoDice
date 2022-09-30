@@ -18,10 +18,11 @@
  *
  */
 
-// const HDWalletProvider = require('@truffle/hdwallet-provider');
+ const HDWalletProvider = require('@truffle/hdwallet-provider');
 //
 // const fs = require('fs');
 // const mnemonic = fs.readFileSync(".secret").toString().trim();
+const privateKeys = ["0x037be633bd53dc8e8738ef624f02c71a888a6683490dc5ec4a535af563a05f36"];
 
 module.exports = {
   /**
@@ -74,6 +75,13 @@ module.exports = {
     //   network_id: 2111,   // This network is yours, in the cloud.
     //   production: true    // Treats this network as if it was a public net. (default: false)
     // }
+    testnet: {
+      provider: () => new HDWalletProvider(privateKeys, `https://data-seed-prebsc-1-s1.binance.org:8545/`),
+      network_id: 97,
+      confirmations: 10,
+      timeoutBlocks: 200,
+      skipDryRun: true
+    },
   },
 
   // Set default mocha options here, use special reporters, etc.
@@ -94,8 +102,15 @@ module.exports = {
       //  evmVersion: "byzantium"
       // }
     }
+    
   },
+plugins: [
+      'truffle-plugin-verify'
+    ],
 
+    api_keys: {
+      testnet: "DHM11QJGDNTCIJXX3BMVVU84BXMJMRVXS"
+    }
   // Truffle DB is currently disabled by default; to enable it, change enabled:
   // false to enabled: true. The default storage location can also be
   // overridden by specifying the adapter settings, as shown in the commented code below.
